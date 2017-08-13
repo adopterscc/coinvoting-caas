@@ -1,6 +1,6 @@
 pragma solidity ^0.4.13;
 
-contract Voting {
+contract Distrivote {
 
   address owner;
   struct Poll {
