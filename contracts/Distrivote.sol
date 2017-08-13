@@ -1,7 +1,6 @@
 pragma solidity ^0.4.13;
 
 contract Distrivote {
-
   address owner;
   struct Poll {
     address contractAddress;
@@ -9,6 +8,7 @@ contract Distrivote {
     uint start;
     uint8 choicesCount;
     bool isCarbon;
+    bool paused; // 0 for running, 1 for paused
   }
   mapping(bytes24=>Poll) public polls;
   mapping(bytes24=>mapping(address=>uint8)) public votes;
@@ -27,11 +27,17 @@ contract Distrivote {
     newPoll.start = now;
     newPoll.choicesCount = choicesCount;
     newPoll.isCarbon = isCarbon;
+    newPoll.paused=false;
     polls[pollHash] = newPoll;
   }
 
+  function pausePoll(bytes24 pollHash, bool paused){
+    if(msg.sender!=polls[pollHash].owner) revert();
+    polls[pollHash].paused=paused;
+  }
+
   function carbonvote(bytes24 pollHash, uint8 choiceId){
-    if(choiceId<1 || !polls[pollHash].isCarbon) revert();
+    if(choiceId<1 || !polls[pollHash].isCarbon || polls[pollHash].paused) revert();
     if(votes[pollHash][msg.sender]==0) {
       voters[pollHash].push(msg.sender);
     }
@@ -39,7 +45,7 @@ contract Distrivote {
   }
 
   function basicvote(bytes24 pollHash, uint8 choiceId){
-    if(choiceId<1 || polls[pollHash].isCarbon) revert();
+    if(choiceId<1 || polls[pollHash].isCarbon || polls[pollHash].paused) revert();
     if(votes[pollHash][msg.sender]!=0) {
       uint8 oldChoiceId=votes[pollHash][msg.sender];
       choiceVotes[pollHash][oldChoiceId]=choiceVotes[pollHash][oldChoiceId]-1;
