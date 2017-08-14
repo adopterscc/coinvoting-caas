@@ -13,7 +13,7 @@ contract('Distrivote', function(accounts) {
     });
   });
 
-  it("should create carbon poll correctly", function() {
+  /*it("should create carbon poll correctly", function() {
     var voting;
     var poll1_hash = "poll1";
     var poll1_contracthash = "0x39967ee88010055c6f8c12b005dd1eec07115c0a";
@@ -31,7 +31,7 @@ contract('Distrivote', function(accounts) {
         assert.equal(res[1][0].c[0], 4, "carbonvote chosing faulty");
       });
     });
-  });
+  });*/
 });
 
 /**

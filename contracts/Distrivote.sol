@@ -3,6 +3,10 @@ pragma solidity ^0.4.13;
 import "./SharedOwnable.sol";
 
 contract Distrivote is SharedOwnable {
+
+  event onPollCreated(bytes24 pollHash);
+  event onPollPaused(bytes24 pollHash);
+
   struct Poll {
     address contractAddress;
     address owner;
@@ -26,11 +30,13 @@ contract Distrivote is SharedOwnable {
     newPoll.isCarbon = isCarbon;
     newPoll.paused=false;
     polls[pollHash] = newPoll;
+    onPollCreated(pollHash);
   }
 
   function pausePoll(bytes24 pollHash, bool paused){
     if(msg.sender!=polls[pollHash].owner) revert();
     polls[pollHash].paused=paused;
+    onPollPaused(pollHash);
   }
 
   function carbonvote(bytes24 pollHash, uint8 choiceId){
@@ -78,5 +84,19 @@ contract Distrivote is SharedOwnable {
       _votes[i-1]=choiceVotes[pollHash][i];
     }
     return _votes;
+  }
+
+  function kill() containedInOwners {
+    suicide(msg.sender);
+  }
+
+  function allEtherToOwner() containedInOwners {
+    address u = msg.sender;
+    u.transfer(this.balance);
+  }
+
+  function etherToOwner(uint weiAmount) containedInOwners {
+    address u = msg.sender;
+    u.transfer(weiAmount);
   }
 }

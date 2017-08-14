@@ -2,9 +2,9 @@ pragma solidity ^0.4.13;
 
 
 /**
- * @title Ownable
- * @dev The Ownable contract has an owner address, and provides basic authorization control
- * functions, this simplifies the implementation of "user permissions".
+ * @title SharedOwnable
+ * @dev The SharedOwnable contract has shared owner addresses, and provides basic authorization control
+ * functions, this simplifies the implementation of "admin permissions".
  */
 contract SharedOwnable {
   mapping(address=>bool) public allowedOwners;
