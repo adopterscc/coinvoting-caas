@@ -27,9 +27,6 @@ contract SharedOwnable {
     _;
   }
 
-  /**
-  * @dev Throws if anotherOwner is already an owner
-  */
   function addOwner(address anotherOwner) containedInOwners {
     require( anotherOwner != address(0) );
     ownerKeys.push(anotherOwner);
@@ -37,7 +34,7 @@ contract SharedOwnable {
   }
 
   /**
-  * @dev Throws if anotherOwner is not in allowedOwners or sender is same as owner to ensure contract never becomes ownerless
+  * @dev Throws if sender is same as owner to ensure contract never becomes ownerless
   */
   function removeOwner(address anotherOwner) containedInOwners {
     require( msg.sender!=anotherOwner );
