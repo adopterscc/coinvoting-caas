@@ -1,6 +1,18 @@
 var Distrivote = artifacts.require("./Distrivote.sol");
 
 contract('Distrivote', function(accounts) {
+  it("should be sharedOwnable", function() {
+    return Distrivote.deployed().then(function(instance) {
+      voting = instance;
+      voting.addOwner(accounts[1]);
+    }).then(function(){
+      voting.removeOwner(accounts[0], {from: accounts[1]});
+      return voting.getOwners.call();
+    }).then(function(owners){
+      console.log(owners);
+    });
+  });
+
   it("should create carbon poll correctly", function() {
     var voting;
     var poll1_hash = "poll1";

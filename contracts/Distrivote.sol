@@ -1,7 +1,8 @@
 pragma solidity ^0.4.13;
 
-contract Distrivote {
-  address owner;
+import "./SharedOwnable.sol";
+
+contract Distrivote is SharedOwnable {
   struct Poll {
     address contractAddress;
     address owner;
@@ -14,10 +15,6 @@ contract Distrivote {
   mapping(bytes24=>mapping(address=>uint8)) public votes;
   mapping(bytes24=>address[]) public voters;
   mapping(bytes24=>mapping(uint8=>uint)) public choiceVotes;
-
-  function Voting(){
-    owner = msg.sender;
-  }
 
   function createPoll(bytes24 pollHash, address contractAddress, bool isCarbon, uint8 choicesCount){
     if(choicesCount<1 || polls[pollHash].start>0) revert();
