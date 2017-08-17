@@ -34,7 +34,7 @@ contract SharedOwnable {
   }
 
   /**
-  * @dev Throws if sender is same as owner to ensure contract never becomes ownerless
+  * @dev Throws if dsender is same as owner to ensure contract never becomes ownerless
   */
   function removeOwner(address anotherOwner) containedInOwners {
     require( msg.sender!=anotherOwner );

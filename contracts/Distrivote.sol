@@ -1,8 +1,8 @@
 pragma solidity ^0.4.13;
 
-import "./SharedOwnable.sol";
+import "./Ownable.sol";
 
-contract Distrivote is SharedOwnable {
+contract Distrivote is Ownable {
 
   event onPollCreated(bytes24 pollHash);
   event onPollPaused(bytes24 pollHash);
@@ -12,22 +12,19 @@ contract Distrivote is SharedOwnable {
     address owner;
     uint start;
     uint8 choicesCount;
-    bool isCarbon;
     bool paused; // 0 for running, 1 for paused
   }
   mapping(bytes24=>Poll) public polls;
   mapping(bytes24=>mapping(address=>uint8)) public votes;
   mapping(bytes24=>address[]) public voters;
-  mapping(bytes24=>mapping(uint8=>uint)) public choiceVotes;
 
-  function createPoll(bytes24 pollHash, address contractAddress, bool isCarbon, uint8 choicesCount){
+  function createPoll(bytes24 pollHash, address contractAddress, uint8 choicesCount){
     if(choicesCount<1 || polls[pollHash].start>0) revert();
     Poll memory newPoll;
     newPoll.contractAddress = contractAddress;
     newPoll.owner = msg.sender;
     newPoll.start = now;
     newPoll.choicesCount = choicesCount;
-    newPoll.isCarbon = isCarbon;
     newPoll.paused=false;
     polls[pollHash] = newPoll;
     onPollCreated(pollHash);
@@ -40,29 +37,18 @@ contract Distrivote is SharedOwnable {
   }
 
   function carbonvote(bytes24 pollHash, uint8 choiceId){
-    if(choiceId<1 || !polls[pollHash].isCarbon || polls[pollHash].paused) revert();
+    if(choiceId<1 || polls[pollHash].paused) revert();
     if(votes[pollHash][msg.sender]==0) {
       voters[pollHash].push(msg.sender);
     }
     votes[pollHash][msg.sender] = choiceId;
   }
 
-  function basicvote(bytes24 pollHash, uint8 choiceId){
-    if(choiceId<1 || polls[pollHash].isCarbon || polls[pollHash].paused) revert();
-    if(votes[pollHash][msg.sender]!=0) {
-      uint8 oldChoiceId=votes[pollHash][msg.sender];
-      choiceVotes[pollHash][oldChoiceId]=choiceVotes[pollHash][oldChoiceId]-1;
-    }
-    choiceVotes[pollHash][choiceId]=choiceVotes[pollHash][choiceId]+1;
-    votes[pollHash][msg.sender] = choiceId;
-  }
-
-  function getPoll(bytes24 pollHash) constant returns(address,address,uint, uint8, bool) {
-    return(polls[pollHash].contractAddress, polls[pollHash].owner, polls[pollHash].start, polls[pollHash].choicesCount, polls[pollHash].isCarbon);
+  function getPoll(bytes24 pollHash) constant returns(address,address,uint, uint8) {
+    return(polls[pollHash].contractAddress, polls[pollHash].owner, polls[pollHash].start, polls[pollHash].choicesCount);
   }
 
   function getVoters(bytes24 pollHash, uint limit, uint offset) constant returns (address[] _voters, uint[] _choiceIds) {
-    if(!polls[pollHash].isCarbon) revert();
     if(offset<voters[pollHash].length){
       uint count = 0;
       uint resultLength = voters[pollHash].length-offset > limit ? limit : voters[pollHash].length-offset;
@@ -76,26 +62,13 @@ contract Distrivote is SharedOwnable {
       return(_voters, _choiceIds);
     }
   }
-  function getChoiceVotes(bytes24 pollHash) constant returns (uint[] _votes) {
-    if(polls[pollHash].isCarbon) revert();
-    uint8 choicesCount = polls[pollHash].choicesCount;
-    _votes = new uint[](choicesCount);
-    for(uint8 i=1; i<=choicesCount; i++){
-      _votes[i-1]=choiceVotes[pollHash][i];
-    }
-    return _votes;
-  }
 
-  function kill() containedInOwners {
-    suicide(msg.sender);
-  }
-
-  function allEtherToOwner() containedInOwners {
+  function allEtherTx() onlyOwner {
     address u = msg.sender;
     u.transfer(this.balance);
   }
 
-  function etherToOwner(uint weiAmount) containedInOwners {
+  function etherTx(uint weiAmount) onlyOwner {
     address u = msg.sender;
     u.transfer(weiAmount);
   }
