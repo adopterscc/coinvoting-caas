@@ -1,8 +1,8 @@
 pragma solidity ^0.4.13;
 
-import "./Ownable.sol";
+import "./Serviceable.sol";
 
-contract Distrivote is Ownable {
+contract Distrivote is Serviceable {
 
   event onPollCreated(string pollHash);
   event onPollPaused(string pollHash);
@@ -18,7 +18,7 @@ contract Distrivote is Ownable {
   mapping(string=>mapping(address=>uint)) votes;
   mapping(string=>address[]) voters;
 
-  function createPoll(string pollHash, address contractAddress, uint choicesCount){
+  function createPoll(string pollHash, address contractAddress, uint choicesCount) payable shouldPay {
     if(choicesCount<1 || polls[pollHash].start>0) revert();
     Poll memory newPoll;
     newPoll.contractAddress = contractAddress;
@@ -59,7 +59,7 @@ contract Distrivote is Ownable {
         _choiceIds[count]=votes[pollHash][ voters[pollHash][i] ];
         count++;
       }
-      return(_voters, _choiceIds, length);
+      return(_voters, _choiceIds);
     }
   }
 
@@ -69,15 +69,5 @@ contract Distrivote is Ownable {
 
   function getAddressVote(string pollHash, address account) constant returns (uint) {
     return votes[pollHash][account];
-  }
-
-  function allEtherTx() onlyOwner {
-    address u = msg.sender;
-    u.transfer(this.balance);
-  }
-
-  function etherTx(uint weiAmount) onlyOwner {
-    address u = msg.sender;
-    u.transfer(weiAmount);
   }
 }

@@ -1,0 +1,82 @@
+{
+  "contract_name": "Serviceable",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newWei",
+          "type": "uint256"
+        }
+      ],
+      "name": "setMinimumTransactionWei",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "minTransactionWei",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "weiAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "transferWei",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "transferAllWei",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    }
+  ],
+  "unlinked_binary": "0x606060405260006001555b60008054600160a060020a03191633600160a060020a03161790555b5b6102a5806100366000396000f300606060405236156100755763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416638da5cb5b811461007a578063993b9031146100a9578063a4bd5d95146100c1578063a81a9756146100e6578063db516e94146100fe578063f2fde38b14610113575b600080fd5b341561008557600080fd5b61008d610134565b604051600160a060020a03909116815260200160405180910390f35b34156100b457600080fd5b6100bf600435610143565b005b34156100cc57600080fd5b6100d4610168565b60405190815260200160405180910390f35b34156100f157600080fd5b6100bf60043561016e565b005b341561010957600080fd5b6100bf6101c3565b005b341561011e57600080fd5b6100bf600160a060020a036004351661021c565b005b600054600160a060020a031681565b60005433600160a060020a0390811691161461015e57600080fd5b60018190555b5b50565b60015481565b6000805433600160a060020a0390811691161461018a57600080fd5b5033600160a060020a03811682156108fc0283604051600060405180830381858888f1935050505015156101bd57600080fd5b5b5b5050565b6000805433600160a060020a039081169116146101df57600080fd5b5033600160a060020a038082169030163180156108fc0290604051600060405180830381858888f19350505050151561016457600080fd5b5b5b50565b60005433600160a060020a0390811691161461023757600080fd5b600160a060020a038116151561024c57600080fd5b6000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5b505600a165627a7a72305820f2cb025098a22a610630bd535d32b18ae193b339f0561186235565eec05042340029",
+  "networks": {},
+  "schema_version": "0.0.5",
+  "updated_at": 1503084211928
+}
