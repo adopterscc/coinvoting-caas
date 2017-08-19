@@ -11,7 +11,7 @@ contract ERC20Sample {
     return (1000000);
   }
   function balanceOf(address who) constant returns (uint){
-    return uint(who);
+    return 2000;
   }
   function transfer(address to, uint value) returns (bool){
     return (true);
