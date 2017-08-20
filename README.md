@@ -1,1 +1,1 @@
-# distrivote-contract
+# coinvoting-contract
